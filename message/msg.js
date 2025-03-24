@@ -27,6 +27,9 @@ const { color, bgcolor, ConsoleLog, biocolor } = require('.' + getreq['color']);
 const { formatSize, sleep, readTime, reSize, runtime, getBuffer, getRandom, pickRandom, fetchJson, isUrl, genMath, formatp } = require('.' + getreq['funct']);
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid, writeExif, writeExifStc } = require('.' + getreq['exif']);
 
+//SCRAPE
+const { upload } = require('../lib/scrape/uploader.js');
+
 //DATABASE 
 var balance = JSON.parse(fs.readFileSync('./database/balance.json'));
 var limit = JSON.parse(fs.readFileSync('./database/limit.json'));
@@ -480,6 +483,54 @@ case prefix + 'group' : {
  } catch (error) {
  return m.reply(`Terjadi kesalahan saat mengakses URL: ${error.message}`);
  }
+}
+break
+
+case prefix + 'toanime': case prefix + 'jadianime': {
+if (!/image/.test(mime)) {
+        return m.reply(`*PERMINTAAN ERROR!! PESAN :*\n> *Reply/Send Gambar Dengan Caption .${command}*`);
+    }
+    if (!quoted) {
+        return m.reply(`*PERMINTAAN ERROR!! PESAN :*\n> *Reply/Send Gamba Dengan Caption .${command}*`);
+    }
+    m.reply('sabar sedang proses..');
+    let media = await Shannz.downloadAndSaveMediaMessage(quoted);
+    let anu = await upload(media);
+    let gas = await (await fetch(`https://shannz-myapi.hf.space/ai/aiease?imageUrl=${anu}&models=Japan+Anime`)).json();
+    let final = gas.result.image;
+    Shannz.sendMessage(m.chat, { image: { url: final }, caption: '*SUCCESS ✅*'}, { quoted: m})
+}
+break
+
+case prefix + 'tobadut': case prefix + 'jadibadut': {
+if (!/image/.test(mime)) {
+        return m.reply(`*PERMINTAAN ERROR!! PESAN :*\n> *Reply/Send Gambar Dengan Caption .${command}*`);
+    }
+    if (!quoted) {
+        return m.reply(`*PERMINTAAN ERROR!! PESAN :*\n> *Reply/Send Gamba Dengan Caption .${command}*`);
+    }
+    m.reply('sabar sedang proses..');
+    let media = await Shannz.downloadAndSaveMediaMessage(quoted);
+    let anu = await upload(media);
+    let gas = await (await fetch(`https://shannz-myapi.hf.space/ai/aiease?imageUrl=${anu}&models=Clown`)).json();
+    let final = gas.result.image;
+    Shannz.sendMessage(m.chat, { image: { url: final }, caption: '*SUCCESS ✅*'}, { quoted: m})
+}
+break
+
+case prefix + 'hd': case prefix + 'hdr': {
+if (!/image/.test(mime)) {
+        return m.reply(`*PERMINTAAN ERROR!! PESAN :*\n> *Reply/Send Gambar Dengan Caption .${command}*`);
+    }
+    if (!quoted) {
+        return m.reply(`*PERMINTAAN ERROR!! PESAN :*\n> *Reply/Send Gamba Dengan Caption .${command}*`);
+    }
+    m.reply('sabar sedang proses..');
+    let media = await Shannz.downloadAndSaveMediaMessage(quoted);
+    let anu = await upload(media);
+    let gas = await (await fetch(`https://shannz-myapi.hf.space/tools/enhance?imageUrl=${anu}`)).json();
+    let final = gas.result.resultImageUrl;
+    Shannz.sendMessage(m.chat, { image: { url: final }, caption: '*SUCCESS ✅*'}, { quoted: m})
 }
 break
   
